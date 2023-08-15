@@ -1,0 +1,23 @@
+{
+    "cities": [
+        {
+            "name": "Paris",
+            "image": "http://paris.com"
+        },
+        {
+            "name": "Buenos Aires",
+            "image": "http://buenosaires.com"
+        }
+    ],
+    "users": [
+        {
+            "name": "Pablito"
+        },
+        {
+            "name": "Valentino"
+        },
+        {
+            "name": "Juan"
+        }
+    ]
+}
