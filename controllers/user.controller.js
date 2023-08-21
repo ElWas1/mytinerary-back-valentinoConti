@@ -78,6 +78,30 @@ const controller = {
             })
         }
     },
+    updateUser: async (req, res) => {
+        try {
+            const updateUser = await User.updateOne({ _id: req.params.id }, req.body)
+
+            if (updateUser) {
+                return res.status(200).json({
+                    success: true,
+                    message: "The user has been successfully updated."
+                })
+            }
+
+            return res.status(404).json({
+                success: false,
+                message: "User not found."
+            })
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                success: false,
+                message: "An error ocurred while trying to update the user."
+            })
+        }
+    },
     deleteUser: async (req, res) => {
         try {
             const deleteUser = await User.deleteOne(req.body)

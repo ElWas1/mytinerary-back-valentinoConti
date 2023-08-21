@@ -9,12 +9,8 @@ const controller = {
             queries.name = new RegExp(`^${req.query.name}`, 'i')
         }
 
-        if (req.query.name) {
-            queries.name = req.query.name
-        }
-
         try {
-            const cities = await City.find(queries).populate('user');
+            const cities = await City.find(queries).populate('create_by');
 
             if (cities.length > 0) {
                 return res.status(200).json({
@@ -78,9 +74,33 @@ const controller = {
             })
         }
     },
+    updateCity: async (req, res) => {
+        try {
+            const updateCity = await City.updateOne({ _id: req.params.id }, req.body)
+
+            if (updateCity) {
+                return res.status(200).json({
+                    success: true,
+                    message: "The city has been successfully updated."
+                })
+            }
+
+            return res.status(404).json({
+                success: false,
+                message: "Element not found."
+            })
+
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                success: false,
+                message: "An error ocurred while trying to update the city."
+            })
+        }
+    },
     deleteCity: async (req, res) => {
         try {
-            const deleteCity = await City.deleteOne(req.body)
+            const deleteCity = await City.findByIdAndDelete({ _id: req.params.id })
 
             if (deleteCity) {
                 return res.status(200).json({

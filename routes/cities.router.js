@@ -3,7 +3,7 @@ import cityController from '../controllers/city.controller.js';
 
 const router = express.Router();
 
-const { getCities, getCityById, postCity, deleteCity } = cityController;
+const { getCities, getCityById, postCity, updateCity, deleteCity } = cityController;
 
 router.get('/', getCities);
 
@@ -11,6 +11,8 @@ router.get('/:id', getCityById);
 
 router.post('/', postCity);
 
-router.delete('/:id', deleteCity)
+router.put('/:id', updateCity);
+
+router.delete('/:id', deleteCity);
 
 export default router;
