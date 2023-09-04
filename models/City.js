@@ -8,8 +8,7 @@ const schema = new Schema({
     country: { type: String, required: true },
     description: { type: String, required: true },
     language: { type: String, required: true },
-    currency: { type: String, required: true },
-    create_by: {type: Types.ObjectId, ref: 'users'}
+    currency: { type: String, required: true }
 }, {
     timestamps: true
 });
