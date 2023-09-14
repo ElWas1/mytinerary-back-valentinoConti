@@ -13,6 +13,10 @@ const controller = {
             queries.name = req.query.name
         }
 
+        if (req.query.email) {
+            queries.email = req.query.email
+        }
+
         try {
             const users = await User.find(queries);
 
