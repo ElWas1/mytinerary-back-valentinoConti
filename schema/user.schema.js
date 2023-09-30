@@ -1,7 +1,7 @@
 import joi from 'joi';
 
 const name = joi.string()
-    .pattern(/^[A-Za-z]+$/)
+    .pattern(/^[A-Za-z ]+$/)
     .required()
     .min(2)
     .max(30)
@@ -13,7 +13,7 @@ const name = joi.string()
     })
 
 const lastName = joi.string()
-    .pattern(/^[A-Za-z]+$/)
+    .pattern(/^[A-Za-z ]+$/)
     .required()
     .min(2)
     .max(30)

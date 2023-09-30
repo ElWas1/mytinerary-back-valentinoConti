@@ -13,6 +13,7 @@ const controller = {
             const itineraries = await Itinerary.find(queries)
                 .populate('created_by')
                 .populate('city')
+                .populate('comments.user')
 
             if (itineraries.length > 0) {
                 return res.status(200).json({
@@ -162,7 +163,7 @@ const controller = {
     getComments: async (req, res) => {
         try {
 
-            const commentsArray = await Itinerary.findById({ _id: req.params.id }).populate('comments.user')
+            const commentsArray = await Itinerary.findById(req.params.id).populate('comments.user')
 
             if (commentsArray) {
                 return res.status(200).json({
@@ -189,7 +190,7 @@ const controller = {
             const newComment = {
                 comment: req.body.comment,
                 user: req.body.user,
-                id: req.body.id
+                itineraryId: req.body.itineraryId
             };
 
             const postComment = await Itinerary.findOneAndUpdate(
