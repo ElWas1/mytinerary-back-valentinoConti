@@ -11,6 +11,7 @@ const schema = new Schema({
     hashtags: [{ type: String, required: true }],
     comments: [{ 
         user: { type: Types.ObjectId, ref: 'users' },
+        itineraryId: { type: String },
         comment: { type: String }
      }],
     activities: [{
