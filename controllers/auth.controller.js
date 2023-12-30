@@ -42,7 +42,7 @@ const controller = {
                     image: user.image
                 },
                 process.env.SECRET_TOKEN,
-                { expiresIn: '10h' }
+                { expiresIn: '3h' }
             )
 
             user.password = null;
@@ -151,6 +151,7 @@ const controller = {
             })
         }
     },
+
     token: async (req, res, next) => {
         const { user } = req
         try {
@@ -164,7 +165,71 @@ const controller = {
         } catch (error) {
             next(error);
         }
-    }
+    },
 
+    isTokenNearExpiration: async (req, res) => {
+
+        const oldToken = (req.headers.authorization).split(' ')[1];
+
+        if (!oldToken) {
+            return res.status(401).json({ message: 'No token provided.' });
+        }
+
+        const { exp } = jwt.decode(oldToken);
+
+        const currentTime = Math.floor(Date.now() / 1000);
+        const bufferTime = (30 * 60);
+
+        const nearExpiration = (exp - currentTime <= bufferTime);
+
+        if (nearExpiration) {
+            try {
+                let user = await User.findOneAndUpdate(
+                    { email: req.user.email },
+                    { online: true },
+                    { new: true }
+                )
+
+                const token = jwt.sign(
+                    {
+                        id: user._id,
+                        email: user.email,
+                        name: user.name,
+                        image: user.image
+                    },
+                    process.env.SECRET_TOKEN,
+                    { expiresIn: '3h' }
+                )
+
+                user.password = null;
+
+                return res.status(200).json({
+                    success: true,
+                    message: 'Token has been successfully renewed.',
+                    response: {
+                        token,
+                        user: {
+                            name: user.name,
+                            image: user.image,
+                            email: user.email,
+                            id: user._id
+                        }
+                    }
+                })
+
+            } catch (error) {
+                res.status(500).json({
+                    success: false,
+                    message: 'Error while trying to renew the token.'
+                })
+            }
+        } else {
+            return res.status(204).json({
+                success: true,
+                message: 'Token does not need to be renewed yet.'
+            })
+        }
+    }
 }
+
 export default controller;

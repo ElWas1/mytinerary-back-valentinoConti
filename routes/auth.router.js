@@ -8,7 +8,7 @@ import passport from '../middlewares/passport.js';
 import { validator } from '../middlewares/validator.js';
 import { createUserSchema, signInSchema } from '../schema/user.schema.js';
 
-const { signUp, signIn, signOut, token, googleAuth } = authController;
+const { signUp, signIn, signOut, token, googleAuth, isTokenNearExpiration } = authController;
 
 const router = express.Router();
 
@@ -36,6 +36,16 @@ router.post(
 router.post('/google', googleAuth)
 
 router.post('/token',
-    passport.authenticate('jwt', { session: false }), token)
+    passport.authenticate('jwt', { session: false }), token
+)
+
+router.post(
+    '/checkTokenExpiration',
+    validator(signInSchema),
+    accExistsSignIn,
+    accHasBeenVerified,
+    passIsOk,
+    isTokenNearExpiration
+)
 
 export default router;
