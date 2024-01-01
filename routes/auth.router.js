@@ -41,10 +41,7 @@ router.post('/token',
 
 router.post(
     '/checkTokenExpiration',
-    validator(signInSchema),
-    accExistsSignIn,
-    accHasBeenVerified,
-    passIsOk,
+    passport.authenticate('jwt', { session: false }),
     isTokenNearExpiration
 )
 

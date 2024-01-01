@@ -169,13 +169,13 @@ const controller = {
 
     isTokenNearExpiration: async (req, res) => {
 
-        const oldToken = (req.headers.authorization).split(' ')[1];
+        const token = (req.headers.authorization).split(' ')[1];
 
-        if (!oldToken) {
+        if (!token) {
             return res.status(401).json({ message: 'No token provided.' });
         }
 
-        const { exp } = jwt.decode(oldToken);
+        const { exp } = jwt.decode(token);
 
         const currentTime = Math.floor(Date.now() / 1000);
         const bufferTime = (30 * 60);
@@ -224,9 +224,12 @@ const controller = {
                 })
             }
         } else {
-            return res.status(204).json({
+            return res.status(200).json({
                 success: true,
-                message: 'Token does not need to be renewed yet.'
+                message: 'Token does not need to be renewed yet.',
+                response: {
+                    token
+                }
             })
         }
     }
