@@ -1,5 +1,4 @@
 import City from '../models/City.js';
-import _ from 'lodash'
 
 const controller = {
     getCities: async (req, res) => {
@@ -7,8 +6,7 @@ const controller = {
         let queries = {};
 
         if (req.query.name) {
-            const sanitizedInput = _.escapeRegExp(req.query.name);
-            queries.name = new RegExp(`^${sanitizedInput}`, 'i');
+            queries.name = new RegExp(`^${req.query.name}`, 'i')
         }
 
         try {
@@ -78,10 +76,7 @@ const controller = {
     },
     updateCity: async (req, res) => {
         try {
-            const updateData = { $set: req.body };
-            updateData.$eq = { _id: req.params.id };
-
-            const updateCity = await City.updateOne({ _id: req.params.id }, updateData)
+            const updateCity = await City.updateOne({ _id: req.params.id }, req.body)
 
             if (updateCity) {
                 return res.status(200).json({
