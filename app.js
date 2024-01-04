@@ -7,6 +7,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
+import rateLimit from 'express-rate-limit';
 
 import indexRouter from './routes/index.router.js';
 import usersRouter from './routes/users.router.js';
@@ -14,6 +15,14 @@ import usersRouter from './routes/users.router.js';
 import { __dirname } from './utils.js';
 
 const app = express();
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 150,
+  message: 'Too many requests from this IP adress, try again later.'
+});
+
+app.use(limiter)
 
 app.use(morgan('dev'));
 
@@ -23,7 +32,6 @@ app.set('view engine', 'ejs');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(logger('dev'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());

@@ -6,7 +6,7 @@ const controller = {
         let queries = {};
 
         if (req.query.cityId) {
-            queries.city = req.query.cityId
+            queries.city = { $eq: req.query.cityId }
         }
 
         try {
@@ -40,7 +40,7 @@ const controller = {
         let queries = {};
 
         if (req.query.cityId) {
-            queries.city = req.query.cityId
+            queries.city = { $eq: req.query.cityId }
         }
 
         try {
