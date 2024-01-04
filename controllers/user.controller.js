@@ -1,4 +1,5 @@
 import User from '../models/User.js';
+import _ from 'lodash';
 
 const controller = {
     getUsers: async (req, res) => {
@@ -6,15 +7,12 @@ const controller = {
         let queries = {};
 
         if (req.query.name) {
-            queries.name = new RegExp(`^${req.query.name}`, 'i')
-        }
-
-        if (req.query.name) {
-            queries.name = req.query.name
+            const sanitizedInput = _.escapeRegExp(req.query.name);
+            queries.name = new RegExp(`^${sanitizedInput}`, 'i');
         }
 
         if (req.query.email) {
-            queries.email = req.query.email
+            queries.email = { $eq: req.query.email }
         }
 
         try {
