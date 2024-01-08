@@ -79,14 +79,37 @@ const controller = {
     updateCity: async (req, res) => {
         try {
 
-            if (typeof req.body !== 'object' || Array.isArray(req.body)) {
+            const { name, last_name, email, image, password, google, country, online, verified, role, profile } = req.body;
+
+            // Verificar si los campos requeridos están presentes
+            if (!name || !last_name || !email || !image || !password || !google || !country || !online || !verified || !role || !profile) {
                 return res.status(400).json({
                     success: false,
-                    message: "The body of the request must be a literal object."
+                    message: "Missing data."
                 });
             }
 
-            const updateCity = await City.updateOne({ _id: { $eq: req.params.id } }, req.body);
+            // Verificar los tipos de datos de los campos
+            if (
+                typeof name !== 'string' ||
+                typeof last_name !== 'string' ||
+                typeof email !== 'string' ||
+                typeof image !== 'string' ||
+                typeof password !== 'string' ||
+                typeof google !== 'boolean' ||
+                typeof country !== 'string' ||
+                typeof online !== 'boolean' ||
+                typeof verified !== 'boolean' ||
+                typeof role !== 'string' ||
+                typeof profile !== 'object' ||
+                typeof profile.bio !== 'string'
+            ) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Types of data provided are not valid."
+                });
+            }
+            const updateCity = await City.updateOne({ _id: { $eq: req.params.id } }, { $set: req.body });
 
             if (updateCity) {
                 return res.status(200).json({
