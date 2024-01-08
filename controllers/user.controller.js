@@ -82,7 +82,29 @@ const controller = {
     },
     updateUser: async (req, res) => {
         try {
-            const updateUser = await User.updateOne({ _id: req.params.id }, req.body)
+            const body = {
+                name: typeof req.body.name === 'string' ? req.body.name : null,
+                last_name: typeof req.body.last_name === 'string' ? req.body.last_name : null,
+                email: typeof req.body.email === 'string' ? req.body.email : null,
+                image: typeof req.body.image === 'string' ? req.body.image : null,
+                password: typeof req.body.password === 'string' ? req.body.password : null,
+                google: typeof req.body.google === 'boolean' ? req.body.google : false,
+                country: typeof req.body.country === 'string' ? req.body.country : null,
+                online: typeof req.body.online === 'boolean' ? req.body.online : null,
+                verified: typeof req.body.verified === 'boolean' ? req.body.verified : null,
+                verified_code: typeof req.body.verified_code === 'string' ? req.body.verified_code : null,
+                role: typeof req.body.role === 'string' ? req.body.role : null,
+                profile: {
+                    bio: typeof req.body.profile === 'object' && typeof req.body.profile.bio === 'string' ? req.body.profile.bio : null
+                }
+            };
+
+            if (Object.values(body).some(value => value === null)) {
+                res.status(400).json({ status: "error", message: "Wrong types of property." });
+                return;
+            }
+
+            const updateUser = await User.updateOne({ _id: { $eq: req.params.id } }, body)
 
             if (updateUser) {
                 return res.status(200).json({
