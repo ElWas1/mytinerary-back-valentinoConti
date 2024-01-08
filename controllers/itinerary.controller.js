@@ -114,7 +114,31 @@ const controller = {
     },
     updateItinerary: async (req, res) => {
         try {
-            const updateItinerary = await Itinerary.updateOne({ _id: req.params.id }, req.body)
+            const body = {
+                city: typeof req.body.city === 'string' ? req.body.city : null,
+                title: typeof req.body.title === 'string' ? req.body.title : null,
+                price: typeof req.body.price === 'number' ? req.body.price : null,
+                duration: typeof req.body.duration === 'number' ? req.body.duration : null,
+                likes: typeof req.body.likes === 'number' ? req.body.likes : null,
+                hashtags: Array.isArray(req.body.hashtags) ? req.body.hashtags.filter(tag => typeof tag === 'string') : null,
+                comments: Array.isArray(req.body.comments) ? req.body.comments.map(comment => ({
+                    user: typeof comment.user === 'string' ? comment.user : null,
+                    itineraryId: typeof comment.itineraryId === 'string' ? comment.itineraryId : null,
+                    comment: typeof comment.comment === 'string' ? comment.comment : null
+                })) : null,
+                activities: Array.isArray(req.body.activities) ? req.body.activities.map(activity => ({
+                    photo: typeof activity.photo === 'string' ? activity.photo : null,
+                    description: typeof activity.description === 'string' ? activity.description : null
+                })) : null,
+                created_by: typeof req.body.created_by === 'string' ? req.body.created_by : null
+            };
+
+            if (Object.values(body).some(value => value === null)) {
+                res.status(400).json({ status: "error", message: "Wrong types of property." });
+                return;
+            }
+
+            const updateItinerary = await Itinerary.updateOne({ _id: { $eq: req.params.id } }, body)
 
             if (updateItinerary) {
                 return res.status(200).json({
