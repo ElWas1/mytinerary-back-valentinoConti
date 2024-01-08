@@ -79,20 +79,20 @@ const controller = {
     updateCity: async (req, res) => {
         try {
             const body = {
-                name: req.body.name,
-                image: req.body.image,
-                country: req.body.country,
-                description: req.body.description,
-                language: req.body.language,
-                currency: req.body.currency
+                name: typeof req.body.name === 'string' ? req.body.name : null,
+                image: typeof req.body.image === 'string' ? req.body.image : null,
+                country: typeof req.body.country === 'string' ? req.body.country : null,
+                description: typeof req.body.description === 'string' ? req.body.description : null,
+                language: typeof req.body.language === 'string' ? req.body.language : null,
+                currency: typeof req.body.currency === 'string' ? req.body.currency : null
             }
 
-            if (typeof body.name !== 'string' || typeof body.image !== 'string' || typeof body.country !== 'string' || typeof body.description !== 'string' || typeof body.language !== 'string' || typeof body.currency !== 'string') {
-                res.status(400).json({ status: "error" });
+            if (Object.values(body).some(value => value === null)) {
+                res.status(400).json({ status: "error", message: "Wrong types of property." });
                 return;
             }
 
-            const updateCity = await City.updateOne({ _id: { $eq: req.params.id } }, body);
+            const updateCity = await City.updateOne({ _id: { $eq: req.params.id } }, { body: body });
 
             if (updateCity) {
                 return res.status(200).json({
