@@ -92,7 +92,7 @@ const controller = {
                 return;
             }
 
-            const updateCity = await City.updateOne({ _id: { $eq: req.params.id } }, { body: body });
+            const updateCity = await City.updateOne({ _id: { $eq: req.params.id } }, body);
 
             if (updateCity) {
                 return res.status(200).json({
