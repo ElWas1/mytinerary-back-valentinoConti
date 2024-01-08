@@ -106,7 +106,13 @@ const controller = {
     },
     deleteUser: async (req, res) => {
         try {
-            const deleteUser = await User.deleteOne(req.body)
+            const userId = req.params.id;
+
+            if (!userId || typeof userId !== 'string' || userId.length !== 24) {
+                return res.status(400).json({ error: 'Invalid user ID' });
+            }
+
+            const deleteUser = await User.findByIdAndDelete(userId);
 
             if (deleteUser) {
                 return res.status(200).json({
