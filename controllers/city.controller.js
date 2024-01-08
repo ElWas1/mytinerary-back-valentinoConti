@@ -78,10 +78,14 @@ const controller = {
     },
     updateCity: async (req, res) => {
         try {
-            const updateData = { $set: req.body };
-            updateData.$eq = { _id: req.params.id };
+            const updateFields = { $set: req.body };
 
-            const updateCity = await City.updateOne({ _id: req.params.id }, updateData)
+            delete updateFields.$eq;
+            delete updateFields._id;
+
+            const filter = { _id: req.params.id };
+
+            const updateCity = await City.updateOne(filter, updateFields);
 
             if (updateCity) {
                 return res.status(200).json({

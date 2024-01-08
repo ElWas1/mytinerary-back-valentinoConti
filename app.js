@@ -5,12 +5,10 @@ import express from 'express';
 import morgan from 'morgan';
 import path from 'path';
 import cookieParser from 'cookie-parser';
-import logger from 'morgan';
 import cors from 'cors';
 import rateLimit from 'express-rate-limit';
 
 import indexRouter from './routes/index.router.js';
-import usersRouter from './routes/users.router.js';
 
 import { __dirname } from './utils.js';
 
