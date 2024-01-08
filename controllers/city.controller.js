@@ -78,6 +78,14 @@ const controller = {
     },
     updateCity: async (req, res) => {
         try {
+
+            if (typeof req.body !== 'object' || Array.isArray(req.body)) {
+                return res.status(400).json({
+                    success: false,
+                    message: "The body of the request must be a literal object."
+                });
+            }
+
             const updateCity = await City.updateOne({ _id: { $eq: req.params.id } }, req.body);
 
             if (updateCity) {
