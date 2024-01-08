@@ -78,38 +78,21 @@ const controller = {
     },
     updateCity: async (req, res) => {
         try {
-
-            const { name, last_name, email, image, password, google, country, online, verified, role, profile } = req.body;
-
-            // Verificar si los campos requeridos están presentes
-            if (!name || !last_name || !email || !image || !password || !google || !country || !online || !verified || !role || !profile) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Missing data."
-                });
+            const body = {
+                name: req.body.name,
+                image: req.body.image,
+                country: req.body.country,
+                description: req.body.description,
+                language: req.body.language,
+                currency: req.body.currency
             }
 
-            // Verificar los tipos de datos de los campos
-            if (
-                typeof name !== 'string' ||
-                typeof last_name !== 'string' ||
-                typeof email !== 'string' ||
-                typeof image !== 'string' ||
-                typeof password !== 'string' ||
-                typeof google !== 'boolean' ||
-                typeof country !== 'string' ||
-                typeof online !== 'boolean' ||
-                typeof verified !== 'boolean' ||
-                typeof role !== 'string' ||
-                typeof profile !== 'object' ||
-                typeof profile.bio !== 'string'
-            ) {
-                return res.status(400).json({
-                    success: false,
-                    message: "Types of data provided are not valid."
-                });
+            if (typeof body.name !== 'string' || typeof body.image !== 'string' || typeof body.country !== 'string' || typeof body.description !== 'string' || typeof body.language !== 'string' || typeof body.currency !== 'string') {
+                res.status(400).json({ status: "error" });
+                return;
             }
-            const updateCity = await City.updateOne({ _id: { $eq: req.params.id } }, { $set: req.body });
+
+            const updateCity = await City.updateOne({ _id: { $eq: req.params.id } }, body);
 
             if (updateCity) {
                 return res.status(200).json({
