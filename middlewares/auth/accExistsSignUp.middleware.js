@@ -10,6 +10,15 @@ export const accExistsSignUp = async (req, res, next) => {
         })
     };
 
+    const userByUsername = await User.findOne({ username: { $eq: req.body.username } });
+
+    if (userByUsername) {
+        return res.status(400).json({
+            success: false,
+            message: 'Username is not available!'
+        })
+    };
+
     next();
 }
 
