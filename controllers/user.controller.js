@@ -15,6 +15,10 @@ const controller = {
             queries.email = { $eq: req.query.email }
         }
 
+        if (req.query.username) {
+            queries.username = { $eq: req.query.username }
+        }
+
         try {
             const users = await User.find(queries);
 
@@ -85,6 +89,7 @@ const controller = {
             const body = {
                 name: typeof req.body.name === 'string' ? req.body.name : null,
                 last_name: typeof req.body.last_name === 'string' ? req.body.last_name : null,
+                username: typeof req.body.last_name === 'string' ? req.body.last_name : null,
                 email: typeof req.body.email === 'string' ? req.body.email : null,
                 image: typeof req.body.image === 'string' ? req.body.image : null,
                 password: typeof req.body.password === 'string' ? req.body.password : null,

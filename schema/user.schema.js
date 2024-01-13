@@ -24,6 +24,18 @@ const lastName = joi.string()
         'string.max': 'SURNAME_TOO_LONG'
     })
 
+const username = joi.string()
+    .alphanum()
+    .required()
+    .min(2)
+    .max(20)
+    .messages({
+        'any.required': 'USERNAME_REQUIRED',
+        'string.empty': 'USERNAME_REQUIRED',
+        'string.min': 'USERNAME_TOO_SHORT',
+        'string.max': 'USERNAME_TOO_LONG'
+    })
+
 const email = joi.string()
     .required()
     .email({
@@ -64,6 +76,7 @@ const country = joi.string()
 export const createUserSchema = joi.object({
     name: name,
     last_name: lastName,
+    username: username,
     email: email,
     pass: password,
     image: image,

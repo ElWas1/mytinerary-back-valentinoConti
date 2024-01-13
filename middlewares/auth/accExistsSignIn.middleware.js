@@ -8,6 +8,7 @@ export const accExistsSignIn = async (req, res, next) => {
             id: user._id,
             name: user.name,
             surname: user.surname,
+            username: user.username,
             email: user.email,
             password: user.password,
             image: user.image,

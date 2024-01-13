@@ -37,6 +37,7 @@ const controller = {
             const token = jwt.sign(
                 {
                     id: user._id,
+                    username: user.username,
                     email: user.email,
                     name: user.name,
                     image: user.image
@@ -55,6 +56,7 @@ const controller = {
                     user: {
                         name: user.name,
                         image: user.image,
+                        username: user.username,
                         email: user.email,
                         id: user._id
                     }
@@ -194,6 +196,7 @@ const controller = {
                     {
                         id: user._id,
                         email: user.email,
+                        username: user.username,
                         name: user.name,
                         image: user.image
                     },
@@ -211,6 +214,7 @@ const controller = {
                         user: {
                             name: user.name,
                             image: user.image,
+                            username: user.username,
                             email: user.email,
                             id: user._id
                         }
