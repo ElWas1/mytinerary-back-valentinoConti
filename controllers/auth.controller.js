@@ -8,7 +8,7 @@ const controller = {
 
     signUp: async (req, res, next) => {
         req.body.verified_code = crypto.randomBytes(10).toString('hex')
-        req.body.password = bcryptjs.hashSync(req.body.pass, 10)
+        req.body.password = bcryptjs.hashSync(req.body.password, 10)
         req.body.online = false
         req.body.verified = true
         req.body.role = 'user'

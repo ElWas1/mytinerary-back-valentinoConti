@@ -26,6 +26,7 @@ const lastName = joi.string()
 
 const username = joi.string()
     .alphanum()
+    .pattern(/^[a-zA-Z0-9!@#%&*()_+\[\]:;,.?~\\-]+$/) // $, <, >, ^, {, } y / no están permitidos
     .required()
     .min(2)
     .max(20)
@@ -48,12 +49,21 @@ const email = joi.string()
 
 const password = joi.string()
     .required()
+    .pattern(/^[a-zA-Z0-9!@#%&*()_+\[\]:;,.?~\\-]+$/) // $, <, >, ^, {, } y / no están permitidos
     .min(8)
     .max(35)
-    .alphanum()
     .messages({
         'any.required': 'PASSWORD_REQUIRED',
         'string.empty': 'PASSWORD_REQUIRED',
+        'string.min': 'PASSWORD_TOO_SHORT',
+        'string.max': 'PASSWORD_TOO_LONG'
+    })
+
+const new_password = joi.string()
+    .pattern(/^[a-zA-Z0-9!@#%&*()_+\[\]:;,.?~\\-]+$/) // $, <, >, ^, {, } y / no están permitidos
+    .min(8)
+    .max(35)
+    .messages({
         'string.min': 'PASSWORD_TOO_SHORT',
         'string.max': 'PASSWORD_TOO_LONG'
     })
@@ -78,12 +88,12 @@ export const createUserSchema = joi.object({
     last_name: lastName,
     username: username,
     email: email,
-    pass: password,
+    password: password,
     image: image,
     country: country,
 })
 
 export const signInSchema = joi.object({
     email: email,
-    pass: password
+    password: password
 })
