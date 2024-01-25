@@ -86,42 +86,73 @@ const controller = {
     },
     updateUser: async (req, res) => {
         try {
-            const body = {
-                name: typeof req.body.name === 'string' ? req.body.name : null,
-                last_name: typeof req.body.last_name === 'string' ? req.body.last_name : null,
-                username: typeof req.body.last_name === 'string' ? req.body.last_name : null,
-                email: typeof req.body.email === 'string' ? req.body.email : null,
-                image: typeof req.body.image === 'string' ? req.body.image : null,
-                password: typeof req.body.password === 'string' ? req.body.password : null,
-                google: typeof req.body.google === 'boolean' ? req.body.google : false,
-                country: typeof req.body.country === 'string' ? req.body.country : null,
-                online: typeof req.body.online === 'boolean' ? req.body.online : null,
-                verified: typeof req.body.verified === 'boolean' ? req.body.verified : null,
-                verified_code: typeof req.body.verified_code === 'string' ? req.body.verified_code : null,
-                role: typeof req.body.role === 'string' ? req.body.role : null,
-                profile: {
-                    bio: typeof req.body.profile === 'object' && typeof req.body.profile.bio === 'string' ? req.body.profile.bio : null
-                }
-            };
+            const allowedFields = ['name', 'last_name', 'username', 'email', 'image', 'password', 'google', 'country', 'online', 'verified', 'verified_code', 'role', 'profile', 'new_password'];
 
-            if (Object.values(body).some(value => value === null)) {
-                res.status(400).json({ status: "error", message: "Wrong types of property." });
-                return;
+            const body = {};
+            let validTypes = true;
+
+            allowedFields.forEach(field => {
+                if (field in req.body) {
+                    switch (field) {
+                        case 'profile':
+                            if (typeof req.body.profile === 'object' && 'bio' in req.body.profile) {
+                                body.profile = { bio: req.body.profile.bio };
+                            } else {
+                                validTypes = false;
+                            }
+                            break;
+                        case 'email':
+                        case 'password':
+                        case 'new_password':
+                            if (typeof req.body[field] === 'string') {
+                                body[field] = req.body[field];
+                            } else {
+                                validTypes = false;
+                            }
+                            break;
+                        case 'google':
+                        case 'online':
+                        case 'verified':
+                            if (typeof req.body[field] === 'boolean') {
+                                body[field] = req.body[field];
+                            } else {
+                                validTypes = false;
+                            }
+                            break;
+                        default:
+                            if (typeof req.body[field] === 'string') {
+                                body[field] = req.body[field];
+                            } else {
+                                validTypes = false;
+                            }
+                    }
+                }
+            });
+
+            if (!validTypes || !body.email || !body.password) {
+                return res.status(400).json({ status: "error", message: "Invalid types or missing required fields." });
             }
 
-            const updateUser = await User.updateOne({ _id: { $eq: req.params.id } }, body)
+            const pass_form = req.body.password;
+            const new_pass = req.body.new_password;
+
+            if (new_pass && new_pass !== pass_form) {
+                req.body.password = bcryptjs.hashSync(new_pass, 10)
+            }
+
+            const updateUser = await User.updateOne({ _id: { $eq: req.params.id } }, body);
 
             if (updateUser) {
                 return res.status(200).json({
                     success: true,
                     message: "The user has been successfully updated."
-                })
+                });
             }
 
             return res.status(404).json({
                 success: false,
                 message: "User not found."
-            })
+            });
 
         } catch (error) {
             console.log(error);
