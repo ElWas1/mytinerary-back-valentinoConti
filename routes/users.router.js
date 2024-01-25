@@ -2,6 +2,9 @@ import express from 'express';
 import userController from '../controllers/user.controller.js';
 import { validator } from '../middlewares/validator.js';
 import { createUserSchema } from '../schema/user.schema.js';
+import { accExistsSignIn } from '../middlewares/auth/accExistsSignIn.middleware.js';
+import { accHasBeenVerified } from '../middlewares/auth/accHasBeenVerified.middleware.js';
+import { passIsOk } from '../middlewares/auth/passIsOk.middleware.js';
 
 const router = express.Router();
 
@@ -16,7 +19,11 @@ router.post('/',
     postUser
 );
 
-router.put('/:id', updateUser);
+router.put('/:id',
+    accExistsSignIn,
+    accHasBeenVerified,
+    passIsOk,
+    updateUser);
 
 router.delete('/:id', deleteUser);
 
