@@ -1,5 +1,6 @@
 import User from '../models/User.js';
 import _ from 'lodash';
+import bcryptjs from 'bcryptjs';
 
 const controller = {
     getUsers: async (req, res) => {
@@ -132,12 +133,13 @@ const controller = {
             if (!validTypes || !body.email || !body.password) {
                 return res.status(400).json({ status: "error", message: "Invalid types or missing required fields." });
             }
+            const form_password = body.password;
+            const new_password = body.new_password;
 
-            const pass_form = req.body.password;
-            const new_pass = req.body.new_password;
-
-            if (new_pass && new_pass !== pass_form) {
-                req.body.password = bcryptjs.hashSync(new_pass, 10)
+            if (new_password && new_password !== form_password) {
+                body.password = bcryptjs.hashSync(new_password, 10)
+            } else {
+                delete body.password;
             }
 
             const updateUser = await User.updateOne({ _id: { $eq: req.params.id } }, body);

@@ -2,7 +2,7 @@ import bcryptjs from 'bcryptjs';
 
 export const passIsOk = (req, res, next) => {
     const pass_db = req.user.password;
-    const pass_form = req.body.pass;
+    const pass_form = req.body.password;
 
     if (bcryptjs.compareSync(pass_form, pass_db)) {
         return next();
