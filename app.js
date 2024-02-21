@@ -17,7 +17,7 @@ const app = express();
 const limiter = rateLimit({
   // First value = mins
   windowMs: 15 * 60 * 1000,
-  max: 150,
+  max: 600,
   message: 'Too many requests from this IP adress, try again later.'
 });
 
