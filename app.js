@@ -14,6 +14,8 @@ import { __dirname } from './utils.js';
 
 const app = express();
 
+app.set('trust proxy', 1);
+
 const limiter = rateLimit({
   // First value = mins
   windowMs: 15 * 60 * 1000,
