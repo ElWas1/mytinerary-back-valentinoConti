@@ -4,7 +4,7 @@ export const accExistsSignIn = async (req, res, next) => {
     let user;
 
     if (req.body.email) {
-        user = await User.findOne({ email: req.body.email });
+        user = await User.findOne({ email: { $eq: req.body.email } });
     }
     else if (req.params.id) {
         user = await User.findById(req.params.id);
