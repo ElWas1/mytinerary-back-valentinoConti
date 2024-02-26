@@ -25,6 +25,10 @@ router.put('/:id',
     passIsOk,
     updateUser);
 
-router.delete('/:id', deleteUser);
+router.delete('/:id',
+    accExistsSignIn,
+    accHasBeenVerified,
+    passIsOk,
+    deleteUser);
 
 export default router;
