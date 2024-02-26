@@ -138,6 +138,11 @@ const controller = {
 
             if (new_password && new_password !== form_password) {
                 body.password = bcryptjs.hashSync(new_password, 10)
+            } else if (new_password) {
+                return res.status(400).json({
+                    success: false,
+                    message: "New password cannot be the same as the current one."
+                });
             } else {
                 delete body.password;
             }
