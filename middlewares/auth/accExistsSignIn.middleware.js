@@ -1,7 +1,14 @@
 import User from '../../models/User.js';
 
 export const accExistsSignIn = async (req, res, next) => {
-    const user = await User.findOne({ email: { $eq: req.body.email } });
+    let user;
+
+    if (req.body.email) {
+        user = await User.findOne({ email: { $eq: req.body.email } });
+    }
+    else if (req.params.id) {
+        user = await User.findById(req.params.id);
+    }
 
     if (user) {
         req.user = {
