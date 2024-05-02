@@ -6,10 +6,10 @@ const name = joi.string()
     .min(2)
     .max(30)
     .messages({
-        'any.required': 'NAME_REQUIRED',
-        'string.empty': 'NAME_REQUIRED',
-        'string.min': 'NAME_TOO_SHORT',
-        'string.max': 'NAME_TOO_LONG'
+        'any.required': 'Name is required',
+        'string.empty': 'Name is required',
+        'string.min': 'Name is too short',
+        'string.max': 'Name is too long'
     })
 
 const lastName = joi.string()
@@ -18,10 +18,10 @@ const lastName = joi.string()
     .min(2)
     .max(30)
     .messages({
-        'any.required': 'SURNAME_REQUIRED',
-        'string.empty': 'SURNAME_REQUIRED',
-        'string.min': 'SURNAME_TOO_SHORT',
-        'string.max': 'SURNAME_TOO_LONG'
+        'any.required': 'Surname is required',
+        'string.empty': 'Surname is required',
+        'string.min': 'Surname is too short',
+        'string.max': 'Surname is too long'
     })
 
 const username = joi.string()
@@ -31,10 +31,10 @@ const username = joi.string()
     .min(2)
     .max(20)
     .messages({
-        'any.required': 'USERNAME_REQUIRED',
-        'string.empty': 'USERNAME_REQUIRED',
-        'string.min': 'USERNAME_TOO_SHORT',
-        'string.max': 'USERNAME_TOO_LONG'
+        'any.required': 'Username is required',
+        'string.empty': 'Username is required',
+        'string.min': 'Username is too short',
+        'string.max': 'Username is too long'
     })
 
 const email = joi.string()
@@ -43,8 +43,8 @@ const email = joi.string()
         minDomainSegments: 2
     })
     .messages({
-        'any.required': 'EMAIL_REQUIRED',
-        'string.empty': 'EMAIL_REQUIRED'
+        'any.required': 'Email is required',
+        'string.empty': 'Email is required'
     })
 
 const password = joi.string()
@@ -53,10 +53,10 @@ const password = joi.string()
     .min(8)
     .max(35)
     .messages({
-        'any.required': 'PASSWORD_REQUIRED',
-        'string.empty': 'PASSWORD_REQUIRED',
-        'string.min': 'PASSWORD_TOO_SHORT',
-        'string.max': 'PASSWORD_TOO_LONG'
+        'any.required': 'Password is required',
+        'string.empty': 'Password is required',
+        'string.min': 'Password is too short',
+        'string.max': 'Password is too long'
     })
 
 const new_password = joi.string()
@@ -64,17 +64,12 @@ const new_password = joi.string()
     .min(8)
     .max(35)
     .messages({
-        'string.min': 'PASSWORD_TOO_SHORT',
-        'string.max': 'PASSWORD_TOO_LONG'
+        'string.min': 'New password is too short',
+        'string.max': 'New password is too long'
     })
 
 const image = joi.string()
-    .required()
     .uri()
-    .messages({
-        'any.required': 'PASSWORD_REQUIRED',
-        'string.empty': 'PASSWORD_REQUIRED'
-    })
 
 const country = joi.string()
     .required()
